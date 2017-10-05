@@ -16,34 +16,45 @@ source:
     - CMakeLists.patch  # [win]
 
 build:
-  number: 6
+  number: 7
   skip: True  # [win and py36]
   features:
-    - vc9  # [win and py27]
-    - vc10  # [win and py34]
-    - vc14  # [win and (py35 or py36)]
+    - vc{{ vc }}  # [win]
+  run_exports:
+    # C has good backcompat, C++ has poor.  Since we don't make distinction, go with poor
+    #   https://abi-laboratory.pro/tracker/timeline/netcdf/
+    #   https://abi-laboratory.pro/tracker/timeline/netcdf-cxx/
+    - {{ pin_subpackage('libnetcdf', max_pin='x.x.x') }}
 
 requirements:
   build:
-    - python  # [win]
     - cmake
     - pkg-config  # [not win]
-    - msinttypes  # [win]
+    - msinttypes  # [win and vc<14]
     - curl
-    - zlib 1.2.8
+    - zlib
     - hdf4
-    - hdf5 1.8.18|1.8.18.*
-    - vc 9  # [win and py27]
-    - vc 10  # [win and py34]
-    - vc 14  # [win and (py35 or py36)]
+    - hdf5
+    - {{ compiler('c') }}
+    # not sure if we need cxx compiler here - seems to be presently disabled.
+    # - {{ compiler('cxx') }}
+    # not sure if we need fortran compiler here - seems to be presently disabled.
+    # - {{ compiler('fortran') }}
   run:
     - curl
-    - zlib 1.2.8
-    - hdf4
-    - hdf5 1.8.18|1.8.18.*
-    - vc 9  # [win and py27]
-    - vc 10  # [win and py34]
-    - vc 14  # [win and (py35 or py36)]
+    # zlib removed here because zlib package has run_exports for itself
+    #    https://github.com/AnacondaRecipes/zlib-feedstock/pull/2
+    # this req isn't actually necessary, as run_exports will add it.  Left here for reference.
+    # - zlib 1.2.8
+    # hdf4 removed here because package has run_exports for itself
+    #     https://github.com/AnacondaRecipes/hdf4-feedstock/pull/1
+    # this req isn't actually necessary, as run_exports will add it.  Left here for reference.
+    #  - hdf4
+    # hdf5 removed here because hdf5 package has run_exports for itself
+    #    https://github.com/AnacondaRecipes/hdf5-feedstock/pull/1/files#diff-e178b687b10a71a3348107ae3154e44cR31
+    # this req isn't actually necessary, as run_exports will add it.  Left here for reference.
+    # - hdf5
+    # - hdf5 1.8.18|1.8.18.*
 
 test:
   commands:
@@ -67,3 +78,4 @@ extra:
     - groutr
     - ocefpaf
     - kmuehlbauer
+    - msarahan
