@@ -30,5 +30,5 @@ cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
       -D ENABLE_LOGGING=ON \
       $SRC_DIR
 make
-ctest
 make install
+ctest
