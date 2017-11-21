@@ -16,6 +16,8 @@ cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
       -D BUILD_UTILITIES=ON \
       -D ENABLE_DOXYGEN=OFF \
       -D ENABLE_LOGGING=ON \
+      -D CMAKE_PLATFORM=Linux \
+      -D CMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake" \
       --debug-trycompile \
       $SRC_DIR
 make
@@ -35,6 +37,8 @@ cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
       -D BUILD_UTILITIES=ON \
       -D ENABLE_DOXYGEN=OFF \
       -D ENABLE_LOGGING=ON \
+      -D CMAKE_PLATFORM=Linux \
+      -D CMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake" \
       $SRC_DIR
 make
 make install
