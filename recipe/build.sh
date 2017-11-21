@@ -3,10 +3,14 @@
 export CFLAGS="$CFLAGS -I$PREFIX/include"
 export LDFLAGS="$LDFLAGS -L$PREFIX/lib"
 
+if [[ ${HOST} =~ .*darwin.* ]]; then
+    CMAKE_TOOLCHAIN_FLAGS=""
+else
+    CMAKE_TOOLCHAIN_FLAGS=-DCMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake"
+fi
+
 # Build static.
 cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
-      -D CMAKE_C="$CC" \
-      -D CMAKE_CXX="$CXX" \
       -D CMAKE_INSTALL_LIBDIR:PATH=$PREFIX/lib \
       -D ENABLE_DAP=ON \
       -D ENABLE_HDF4=ON \
@@ -16,9 +20,7 @@ cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
       -D BUILD_UTILITIES=ON \
       -D ENABLE_DOXYGEN=OFF \
       -D ENABLE_LOGGING=ON \
-      -D CMAKE_PLATFORM=Linux \
-      -D CMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake" \
-      --debug-trycompile \
+      $CMAKE_TOOLCHAIN_FLAGS \
       $SRC_DIR
 make
 # ctest  # Run only for the shared lib build to save time.
@@ -27,7 +29,6 @@ make clean
 
 # Build shared.
 cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
-      -D CMAKE_C_FLAGS="$CFLAGS" \
       -D CMAKE_INSTALL_LIBDIR:PATH=$PREFIX/lib \
       -D ENABLE_DAP=ON \
       -D ENABLE_HDF4=ON \
@@ -37,8 +38,7 @@ cmake -D CMAKE_INSTALL_PREFIX=$PREFIX \
       -D BUILD_UTILITIES=ON \
       -D ENABLE_DOXYGEN=OFF \
       -D ENABLE_LOGGING=ON \
-      -D CMAKE_PLATFORM=Linux \
-      -D CMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake" \
+      $CMAKE_TOOLCHAIN_FLAGS \
       $SRC_DIR
 make
 make install
