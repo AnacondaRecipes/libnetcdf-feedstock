@@ -26,13 +26,15 @@ source:
     - higher_timeout.patch
 
 build:
-  number: 2
+  number: 3
   run_exports:
     # C has good backcompat, C++ has poor.  Since we only build C, go with good
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
     #   https://abi-laboratory.pro/tracker/timeline/netcdf-cxx/
     - {{ pin_subpackage('libnetcdf') }}
-
+  ignore_run_exports:
+    - bzip2
+    - zlib
 requirements:
   build:
     - cmake
@@ -57,6 +59,7 @@ requirements:
     - jpeg
   run:
     - curl
+    - zlib
 
 test:
   commands:
@@ -69,9 +72,9 @@ test:
     # All these endpotins failed at some point due to various reasons.
     - ncdump -h "http://geoport-dev.whoi.edu/thredds/dodsC/estofs/atlantic"
     - ncdump -h "https://data.nodc.noaa.gov/thredds/dodsC/ioos/sccoos/scripps_pier/scripps_pier-2016.nc"
-    - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/hioos/model/atm/ncep_pac/NCEP_Pacific_Atmospheric_Model_best.ncd"
-    - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/usgs_dem_10m_tinian"
-    - ncdump -h "https://www.ncei.noaa.gov/thredds/dodsC/namanl/201609/20160929/namanl_218_20160929_1800_006.grb"
+    - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/hioos/model/atm/ncep_pac/NCEP_Pacific_Atmospheric_Model_best.ncd"  # [not win]
+    - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/usgs_dem_10m_tinian"  # [not win]
+    - ncdump -h "https://www.ncei.noaa.gov/thredds/dodsC/namanl/201609/20160929/namanl_218_20160929_1800_006.grb"  # [not win]
 
 about:
   home: http://www.unidata.ucar.edu/software/netcdf/
