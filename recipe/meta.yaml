@@ -1,4 +1,4 @@
-{% set version = "4.7.3" %}
+{% set version = "4.8.0" %}
 
 package:
   name: libnetcdf
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/Unidata/netcdf-c/archive/v{{ version }}.tar.gz
-  sha256: 05d064a2d55147b83feff3747bea13deb77bef390cb562df4f9f9f1ce147840d
+  sha256: aff58f02b1c3e91dc68f989746f652fe51ff39e6270764e484920cb8db5ad092
   patches:
     # 0001-Fix-misdetection.. => 0008-Finish-the-missing.. should all be upstreamed:
     # - 0001-Fix-misdetection-of-vlen-issues-when-size_t-is-32-bi.patch
