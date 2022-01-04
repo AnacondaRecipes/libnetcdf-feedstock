@@ -29,6 +29,8 @@ build:
     - bzip2
     - jpeg
     - zlib    [linux]
+  # package is not supported on linux-s390x - errors because hdf4 is missing
+  skip: True  [s390x]
 
 requirements:
   build:
