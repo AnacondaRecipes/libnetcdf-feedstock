@@ -55,13 +55,12 @@ requirements:
     - libzip
   run:
     - curl
-    - bzip2
     - zlib
     - hdf4
     - hdf5
-    - jpeg
     - libzip
     - libssh  # [win]
+
 test:
   commands:
     - test -f ${PREFIX}/lib/libnetcdf.a  # [not win]
