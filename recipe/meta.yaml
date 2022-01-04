@@ -25,6 +25,9 @@ build:
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
     #   https://abi-laboratory.pro/tracker/timeline/netcdf-cxx/
     - {{ pin_subpackage('libnetcdf') }}
+  ignore_run_exports:
+    - bzip2
+    - jpeg
 
 requirements:
   build:
