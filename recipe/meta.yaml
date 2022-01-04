@@ -28,6 +28,7 @@ build:
   ignore_run_exports:
     - bzip2
     - jpeg
+    - zlib    [linux]
 
 requirements:
   build:
@@ -58,7 +59,6 @@ requirements:
     - libzip
   run:
     - curl
-    - zlib
     - hdf4
     - hdf5
     - libzip
