@@ -1,4 +1,4 @@
-{% set version = "4.8.0" %}
+{% set version = "4.8.1" %}
 
 package:
   name: libnetcdf
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/Unidata/netcdf-c/archive/v{{ version }}.tar.gz
-  sha256: aff58f02b1c3e91dc68f989746f652fe51ff39e6270764e484920cb8db5ad092
+  sha256: bc018cc30d5da402622bf76462480664c6668b55eb16ba205a0dfb8647161dd0
   patches:
     - patches/0004-Prefer-getenv-TOPSRCDIR-over-STRINGIFY-TOPSRCDIR.patch
     - patches/0006-Fix-tests-for-Windows-VS2008-define-__func__-as-__FU.patch
@@ -15,9 +15,9 @@ source:
     - patches/prevent_MS_runtime_libs_being_installed_again.patch  # [win]
     - patches/strdup.patch
     - patches/do_not_use_16_processes_in_tests.patch  # [ppc64le]
-    # Fixes from upstream, remove with 4.8.1
-    - patches/cmake_fixes.patch
-    - patches/fixh5epush.patch
+    # to be removed in next release
+    - patches/0010-pr2094.patch
+
 build:
   number: 0
   run_exports:
@@ -25,11 +25,19 @@ build:
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
     #   https://abi-laboratory.pro/tracker/timeline/netcdf-cxx/
     - {{ pin_subpackage('libnetcdf') }}
+  ignore_run_exports:
+    - bzip2
+    - jpeg
+    - zlib    [linux]
+  # package is not supported on linux-s390x - errors because hdf4 is missing
+  skip: True  [s390x]
 
 requirements:
   build:
     - cmake
     - git
+    - patch  # [not win]
+    - m2-patch  # [win]
     - make  # [unix]
     - pkg-config  # [not win]
     - gnuconfig   # [unix]
@@ -40,6 +48,8 @@ requirements:
     - {{ compiler('cxx') }}
     # not sure if we need fortran compiler here - seems to be presently disabled.
     # - {{ compiler('fortran') }}
+    - unzip  # [not win]
+    - m2-unzip  # [win]
   host:
     - msinttypes  # [win and vc<14]
     - bzip2
@@ -51,13 +61,12 @@ requirements:
     - libzip
   run:
     - curl
-    - bzip2
-    - zlib
     - hdf4
     - hdf5
-    - jpeg
     - libzip
     - libssh  # [win]
+    - openssl   [osx and arm64]
+
 test:
   commands:
     - test -f ${PREFIX}/lib/libnetcdf.a  # [not win]
@@ -76,8 +85,10 @@ test:
 about:
   home: http://www.unidata.ucar.edu/software/netcdf/
   license: MIT
+  license_family: MIT
   license_file: COPYRIGHT
   summary: 'Libraries and data formats that support array-oriented scientific data.'
+  dev_url: https://github.com/Unidata/netcdf-c
 
 extra:
   recipe-maintainers:
