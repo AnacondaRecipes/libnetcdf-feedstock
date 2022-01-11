@@ -65,8 +65,8 @@ requirements:
     - hdf4
     - hdf5
     - libzip
-    - libssh  # [win]
-    - openssl   [osx and arm64]
+    - libssh2  # [win]
+    - openssl  # [osx and arm64]
 
 test:
   commands:
