@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 40a5f8c4..91532368 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -2227,12 +2227,12 @@ ADD_SUBDIRECTORY(docs)
+ # in the libdir.
+ ##
+ IF(MSVC)
+-  FILE(GLOB COPY_FILES ${CMAKE_PREFIX_PATH}/lib/*.lib)
++  FILE(GLOB COPY_FILES ${CMAKE_PREFIX_PATH}\\lib\\*.lib)
+   INSTALL(FILES ${COPY_FILES}
+   DESTINATION ${CMAKE_INSTALL_LIBDIR}
+   COMPONENT dependencies)
+ 
+-  FILE(GLOB COPY_FILES ${CMAKE_PREFIX_PATH}/bin/*.dll)
++  FILE(GLOB COPY_FILES ${CMAKE_PREFIX_PATH}\\bin\\*.dll)
+   STRING(REGEX REPLACE "msv[.*].dll" "" COPY_FILES "${COPY_FILES}")
+   INSTALL(FILES ${COPY_FILES}
+   DESTINATION ${CMAKE_INSTALL_BINDIR}
+
