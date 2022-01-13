@@ -73,6 +73,7 @@ requirements:
     - hdf5
     - libzip
     - openssl  # [osx and arm64]
+    - zlib
 
 test:
   commands:
