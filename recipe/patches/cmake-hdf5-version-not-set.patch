@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6b39f0e4..ad98ae25 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -810,11 +810,7 @@ IF(USE_HDF5)
+ 
+   # Check to see if HDF5 library is 1.10.6 or greater.
+   # Used to control path name conversion
+-  IF(${HDF5_VERSION} VERSION_GREATER "1.10.5")
+-    SET(HDF5_UTF8_PATHS ON)
+-  ELSE()
+-    SET(HDF5_UTF8_PATHS OFF)
+-  ENDIF()
++  SET(HDF5_UTF8_PATHS ON)
+ 
+   MESSAGE("-- Checking for HDF5 version 1.10.6 or later: ${HDF5_UTF8_PATHS}")
+ 
+diff --git a/nc_test4/CMakeLists.txt b/nc_test4/CMakeLists.txt
+index c5c34500..437540a3 100644
+--- a/nc_test4/CMakeLists.txt
++++ b/nc_test4/CMakeLists.txt
+@@ -47,9 +47,7 @@ ENDIF(ENABLE_FILTER_TESTING)
+ 
+ ENDIF(BUILD_UTILITIES)
+ 
+-IF(${HDF5_VERSION} VERSION_GREATER "1.10.0")
+-  SET(NC4_TESTS ${NC4_TESTS} tst_virtual_datasets)
+-ENDIF(${HDF5_VERSION} VERSION_GREATER "1.10.0")
++SET(NC4_TESTS ${NC4_TESTS} tst_virtual_datasets)
+ 
+ ##
+ # The shell script, run_empty_vlen_test.sh,

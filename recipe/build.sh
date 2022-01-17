@@ -36,7 +36,7 @@ fi
 # Build static.
 cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_INSTALL_LIBDIR="lib" \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+      -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
       -DENABLE_DAP=ON \
       -DENABLE_HDF4=ON \
       -DENABLE_NETCDF_4=ON \
@@ -45,16 +45,17 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DBUILD_UTILITIES=ON \
       -DENABLE_DOXYGEN=OFF \
       -DENABLE_LOGGING=ON \
-      -DCMAKE_C_FLAGS_RELEASE=${CFLAGS} \
-      -DCMAKE_C_FLAGS_DEBUG=${CFLAGS} \
-      -DCURL_INCLUDE_DIR=${PREFIX}/include \
-      -DCURL_LIBRARY=${PREFIX}/lib/libcurl${SHLIB_EXT} \
+      -DCMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+      -DCMAKE_C_FLAGS_DEBUG="${CFLAGS}" \
+      -DCURL_INCLUDE_DIR="${PREFIX}/include" \
+      -DCURL_LIBRARY="${PREFIX}/lib/libcurl${SHLIB_EXT}" \
       -DENABLE_CDF5=ON \
       -DENABLE_BYTERANGE=ON \
       ${CMAKE_PLATFORM_FLAGS[@]} \
       -DENABLE_NCZARR=on -DENABLE_NCZARR_S3=off -DENABLE_NCZARR_S3_TESTS=off \
       ${SRC_DIR}
 make -j${CPU_COUNT} ${VERBOSE_CM}
+
 # ctest  # Run only for the shared lib build to save time.
 make install -j${CPU_COUNT}
 make clean
@@ -62,7 +63,7 @@ make clean
 # Build shared.
 cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_INSTALL_LIBDIR="lib" \
-      -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} \
+      -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
       -DENABLE_DAP=ON \
       -DENABLE_HDF4=ON \
       -DENABLE_NETCDF_4=ON \
@@ -71,14 +72,15 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DBUILD_UTILITIES=ON \
       -DENABLE_DOXYGEN=OFF \
       -DENABLE_LOGGING=ON \
-      -DCMAKE_C_FLAGS_RELEASE=${CFLAGS} \
-      -DCMAKE_C_FLAGS_DEBUG=${CFLAGS} \
-      -DCURL_INCLUDE_DIR=${PREFIX}/include \
-      -DCURL_LIBRARY=${PREFIX}/lib/libcurl${SHLIB_EXT} \
+      -DCMAKE_C_FLAGS_RELEASE="${CFLAGS}" \
+      -DCMAKE_C_FLAGS_DEBUG="${CFLAGS}" \
+      -DCURL_INCLUDE_DIR="${PREFIX}/include" \
+      -DCURL_LIBRARY="${PREFIX}/lib/libcurl${SHLIB_EXT}" \
       -DENABLE_CDF5=ON \
       ${CMAKE_PLATFORM_FLAGS[@]} \
       -DENABLE_NCZARR=on -DENABLE_NCZARR_S3=off -DENABLE_NCZARR_S3_TESTS=off \
       ${SRC_DIR}
+
 make -j${CPU_COUNT} ${VERBOSE_CM}
 make install -j${CPU_COUNT}
 ctest -VV --output-on-failure || true

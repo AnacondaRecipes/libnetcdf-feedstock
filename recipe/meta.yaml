@@ -8,6 +8,13 @@ source:
   url: https://github.com/Unidata/netcdf-c/archive/v{{ version }}.tar.gz
   sha256: bc018cc30d5da402622bf76462480664c6668b55eb16ba205a0dfb8647161dd0
   patches:
+    # This fixes a mixture of forward and backward slashes that cause recent
+    # versions of CMake to abort.
+    - patches/cmake-lists-win-slashfix.patch  # [win]
+    # Specifying HDF5_C_LIBRARY, HDF5_HL_LIBRARY, HDF5_INCLUDE_DIR skips some
+    # of the auto-detections logic and ends up in HDF5_VERSION not being set,
+    # this causes other parts of the CMakeLists to not work.
+    - patches/cmake-hdf5-version-not-set.patch  # [win]
     - patches/0004-Prefer-getenv-TOPSRCDIR-over-STRINGIFY-TOPSRCDIR.patch
     - patches/0006-Fix-tests-for-Windows-VS2008-define-__func__-as-__FU.patch
     - patches/0008-Finish-the-missing-code-to-handle-VS-in-test_common..patch
@@ -19,7 +26,7 @@ source:
     - patches/0010-pr2094.patch
 
 build:
-  number: 0
+  number: 1
   run_exports:
     # C has good backcompat, C++ has poor.  Since we only build C, go with good
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
@@ -28,7 +35,9 @@ build:
   ignore_run_exports:
     - bzip2
     - jpeg
-    - zlib    [linux]
+    - zlib
+  missing_dso_whitelist: # [osx]
+    - '*/libnetcdf.19.dylib'  # [osx]
   # package is not supported on linux-s390x - errors because hdf4 is missing
   skip: True  [s390x]
 
@@ -64,31 +73,45 @@ requirements:
     - hdf4
     - hdf5
     - libzip
-    - libssh  # [win]
-    - openssl   [osx and arm64]
+    - openssl  # [osx and arm64]
+    - zlib
 
 test:
   commands:
     - test -f ${PREFIX}/lib/libnetcdf.a  # [not win]
     - test -f ${PREFIX}/lib/libnetcdf${SHLIB_EXT}  # [not win]
     - nc-config --all  # [not win]
+
     # ncdump from a URL needs a writeable TEMP directory for storing cookies.
     # Point TEMP to PREFIX on windows to make certain this is true
     - set "TEMP=%PREFIX%"  # [win]
-    # All these endpotins failed at some point due to various reasons.
-    - ncdump -h "http://geoport-dev.whoi.edu/thredds/dodsC/estofs/atlantic"
-    - ncdump -h "https://data.nodc.noaa.gov/thredds/dodsC/ioos/sccoos/scripps_pier/scripps_pier-2016.nc"
-    - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/hioos/model/atm/ncep_pac/NCEP_Pacific_Atmospheric_Model_best.ncd"
-    - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/usgs_dem_10m_tinian"
-    - ncdump -h "https://www.ncei.noaa.gov/thredds/dodsC/namanl/201609/20160929/namanl_218_20160929_1800_006.grb"
+
+    # These URLs are all broken. Keep them around for a bit before removing
+    # completely.
+    #
+    # Broken SSL cert:
+    # - ncdump -h "http://geoport-dev.whoi.edu/thredds/dodsC/estofs/atlantic"
+    # Error 400:
+    # - ncdump -h "https://data.nodc.noaa.gov/thredds/dodsC/ioos/sccoos/scripps_pier/scripps_pier-2016.nc"
+    # Error 400:
+    #- ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/hioos/model/atm/ncep_pac/NCEP_Pacific_Atmospheric_Model_best.ncd"
+    # Error 400:
+    # - ncdump -h "http://oos.soest.hawaii.edu/thredds/dodsC/usgs_dem_10m_tinian"
+    # Error 400:
+    #- ncdump -h "https://www.ncei.noaa.gov/thredds/dodsC/namanl/201609/20160929/namanl_218_20160929_1800_006.grb"
+
+    # This dumps the help text and exits with 0. When called with --help it
+    # exits with 1, very oddly.
+    - ncdump  # [not win]
 
 about:
   home: http://www.unidata.ucar.edu/software/netcdf/
-  license: MIT
-  license_family: MIT
+  license: BSD-3-Clause
+  license_family: BSD
   license_file: COPYRIGHT
   summary: 'Libraries and data formats that support array-oriented scientific data.'
   dev_url: https://github.com/Unidata/netcdf-c
+  doc_url: https://docs.unidata.ucar.edu/netcdf-c/current/
 
 extra:
   recipe-maintainers:
