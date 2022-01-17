@@ -102,15 +102,16 @@ test:
 
     # This dumps the help text and exits with 0. When called with --help it
     # exits with 1, very oddly.
-    - ncdump
+    - ncdump  # [not win]
 
 about:
   home: http://www.unidata.ucar.edu/software/netcdf/
-  license: MIT
-  license_family: MIT
+  license: BSD-3-Clause
+  license_family: BSD
   license_file: COPYRIGHT
   summary: 'Libraries and data formats that support array-oriented scientific data.'
   dev_url: https://github.com/Unidata/netcdf-c
+  doc_url: https://docs.unidata.ucar.edu/netcdf-c/current/
 
 extra:
   recipe-maintainers:
