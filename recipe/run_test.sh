@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 nc-config --has-dap      | grep -q yes
 nc-config --has-dap2     | grep -q yes
