@@ -57,8 +57,9 @@ requirements:
     - {{ compiler('cxx') }}
     # not sure if we need fortran compiler here - seems to be presently disabled.
     # - {{ compiler('fortran') }}
-    - unzip  # [not win]
+    - unzip     # [not win]
     - m2-unzip  # [win]
+    - sed       # [unix]
   host:
     - msinttypes  # [win and vc<14]
     - bzip2
