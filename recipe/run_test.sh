@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+set -e
+
+test -f ${PREFIX}/lib/libnetcdf.a
+test -f ${PREFIX}/lib/libnetcdf${SHLIB_EXT}
+nc-config --all
 
 nc-config --has-dap      | grep -q yes
 nc-config --has-dap2     | grep -q yes
@@ -23,3 +28,7 @@ nc-config --has-cdf5     | grep -q yes
 
 # We cannot package szip due to its license
 # nc-config --has-szlib    | grep -q no
+
+# This dumps the help text and exits with 0. When called with --help it
+# exits with 1, very oddly.
+ncdump
