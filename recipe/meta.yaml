@@ -39,7 +39,7 @@ build:
   missing_dso_whitelist: # [osx]
     - '*/libnetcdf.19.dylib'  # [osx]
   # package is not supported on linux-s390x - errors because hdf4 is missing
-  skip: True  [s390x]
+  skip: True  # [s390x]
 
 requirements:
   build:
