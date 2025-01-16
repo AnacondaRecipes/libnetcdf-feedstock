@@ -6,7 +6,7 @@ set BUILD_TYPE=Release
 :: set BUILD_TYPE=Debug
 
 rem manually specify hdf5 paths to work-around https://github.com/Unidata/netcdf-c/issues/1444
-cmake -G "%CMAKE_GENERATOR%" ^
+cmake -G "Ninja" ^
       -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
       -DBUILD_SHARED_LIBS=ON ^
       -DENABLE_TESTS=ON ^
