@@ -1,33 +1,20 @@
-{% set version = "4.8.1" %}
+{% set name = "libnetcdf" %}
+{% set version = "4.9.3" %}
 
 package:
-  name: libnetcdf
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/Unidata/netcdf-c/archive/v{{ version }}.tar.gz
-  sha256: bc018cc30d5da402622bf76462480664c6668b55eb16ba205a0dfb8647161dd0
+  sha256: 990f46d49525d6ab5dc4249f8684c6deeaf54de6fec63a187e9fb382cc0ffdff
   patches:
-    # This fixes a mixture of forward and backward slashes that cause recent
-    # versions of CMake to abort.
-    - patches/cmake-lists-win-slashfix.patch  # [win]
-    # Specifying HDF5_C_LIBRARY, HDF5_HL_LIBRARY, HDF5_INCLUDE_DIR skips some
-    # of the auto-detections logic and ends up in HDF5_VERSION not being set,
-    # this causes other parts of the CMakeLists to not work.
-    - patches/cmake-hdf5-version-not-set.patch  # [win]
     - patches/0004-Prefer-getenv-TOPSRCDIR-over-STRINGIFY-TOPSRCDIR.patch
-    - patches/0006-Fix-tests-for-Windows-VS2008-define-__func__-as-__FU.patch
-    - patches/0008-Finish-the-missing-code-to-handle-VS-in-test_common..patch
     - patches/0009-topsrcdir.patch
-    - patches/prevent_MS_runtime_libs_being_installed_again.patch  # [win]
-    - patches/strdup.patch
-    - patches/do_not_use_16_processes_in_tests.patch  # [ppc64le]
-    # to be removed in next release
-    - patches/0010-pr2094.patch
-    - patches/0011-add-hfd5-1.14-support.patch
+    - patches/fix-s3-support.patch
 
 build:
-  number: 5
+  number: 0
   run_exports:
     # C has good backcompat, C++ has poor.  Since we only build C, go with good
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
@@ -39,22 +26,19 @@ build:
     - zlib
   missing_dso_whitelist: # [osx]
     - '*/libnetcdf.19.dylib'  # [osx]
-  # package is not supported on linux-s390x - errors because hdf4 is missing
-  skip: True  # [s390x]
 
 requirements:
   build:
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
     - cmake
-    - patch  # [not win]
-    - m2-patch  # [win]
     - make  # [unix]
     - pkg-config  # [not win]
     - gnuconfig   # [unix]
     # Needed for tests: Bash shell not found; disabling shell script tests.
     - posix  # [win]
     - m2-m4  # [win]
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - ninja-base  # [win]
     # not sure if we need fortran compiler here - seems to be presently disabled.
     # - {{ compiler('fortran') }}
@@ -66,7 +50,7 @@ requirements:
     - bzip2 1.0.8
     - libcurl 7.88.1
     - zlib {{ zlib }}
-    - hdf4 4.2.13
+    - hdf4 {{ hdf4}}
     - hdf5 {{ hdf5 }}
     - jpeg 9e
     - libzip 1.8.0
@@ -80,14 +64,21 @@ requirements:
     - zlib
 
 about:
-  home: https://www.unidata.ucar.edu/software/netcdf/
+  home: https://www.unidata.ucar.edu/software/netcdf
   license: BSD-3-Clause
   license_family: BSD
   license_file: COPYRIGHT
-  summary: 'Libraries and data formats that support array-oriented scientific data.'
-  description: 'Libraries and data formats that support array-oriented scientific data.'
+  summary: Libraries and data formats that support array-oriented scientific data.
+  description: |
+    The Unidata network Common Data Form (netCDF) is an interface for scientific data access
+    and a freely-distributed software library that provides an implementation of the interface.
+    The netCDF library also defines a machine-independent format for representing scientific data.
+    Together, the interface, library, and format support the creation, access, and sharing of
+    scientific data. The current netCDF software provides C interfaces for applications and data.
+    Separate software distributions available from Unidata provide Java, Fortran, Python, and C++
+    interfaces. They have been tested on various common platforms.
   dev_url: https://github.com/Unidata/netcdf-c
-  doc_url: https://docs.unidata.ucar.edu/netcdf-c/current/
+  doc_url: https://docs.unidata.ucar.edu/netcdf-c/current
 
 extra:
   recipe-maintainers:
