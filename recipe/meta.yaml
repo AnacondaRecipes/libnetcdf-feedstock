@@ -36,15 +36,12 @@ requirements:
     - make  # [unix]
     - pkg-config  # [not win]
     - gnuconfig   # [unix]
-    # Needed for tests: Bash shell not found; disabling shell script tests.
-    - posix  # [win]
-    - m2-m4  # [win]
-    - ninja-base  # [win]
-    # not sure if we need fortran compiler here - seems to be presently disabled.
-    # - {{ compiler('fortran') }}
     - unzip     # [not win]
     - m2-unzip  # [win]
-    - sed       # [unix]
+    - m4  # [not win]
+    - m2-m4  # [win]
+    - wget  # [not win]
+    - diffutils  # [linux]
   host:
     - msinttypes  # [win and vc<14]
     - bzip2 1.0.8
