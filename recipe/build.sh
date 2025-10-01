@@ -23,8 +23,6 @@ if [[ ${HOST} =~ .*darwin.* ]]; then
   #  (symbol in a section other than those above according to man nm), instead though
   #  or to fix ld64 so that it checks for symbols being used in this section).
   export LDFLAGS=$(echo "${LDFLAGS}" | sed "s/-Wl,-dead_strip_dylibs//g")
-else
-  CMAKE_PLATFORM_FLAGS+=(-DCMAKE_TOOLCHAIN_FILE="${RECIPE_DIR}/cross-linux.cmake")
 fi
 
 if [[ ${DEBUG_C} == yes ]]; then
@@ -38,7 +36,7 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_INSTALL_LIBDIR="lib" \
       -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
       -DENABLE_DAP=ON \
-      -DENABLE_HDF4=ON \
+      -DNETCDF_ENABLE_HDF4=ON \
       -DENABLE_NETCDF_4=ON \
       -DBUILD_SHARED_LIBS=OFF \
       -DENABLE_TESTS=ON \
@@ -49,6 +47,8 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_C_FLAGS_DEBUG="${CFLAGS}" \
       -DCURL_INCLUDE_DIR="${PREFIX}/include" \
       -DCURL_LIBRARY="${PREFIX}/lib/libcurl${SHLIB_EXT}" \
+      -DHDF4_INCLUDE_DIR="${PREFIX}/include" \
+      -DHDF4_LIBRARIES="${PREFIX}/lib/libmfhdf${SHLIB_EXT};${PREFIX}/lib/libdf${SHLIB_EXT}" \
       -DENABLE_CDF5=ON \
       -DENABLE_BYTERANGE=ON \
       ${CMAKE_PLATFORM_FLAGS[@]} \
@@ -65,7 +65,7 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_INSTALL_LIBDIR="lib" \
       -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE}" \
       -DENABLE_DAP=ON \
-      -DENABLE_HDF4=ON \
+      -DNETCDF_ENABLE_HDF4=ON \
       -DENABLE_NETCDF_4=ON \
       -DBUILD_SHARED_LIBS=ON \
       -DENABLE_TESTS=ON \
@@ -76,6 +76,8 @@ cmake ${CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX} \
       -DCMAKE_C_FLAGS_DEBUG="${CFLAGS}" \
       -DCURL_INCLUDE_DIR="${PREFIX}/include" \
       -DCURL_LIBRARY="${PREFIX}/lib/libcurl${SHLIB_EXT}" \
+      -DHDF4_INCLUDE_DIR="${PREFIX}/include" \
+      -DHDF4_LIBRARIES="${PREFIX}/lib/libmfhdf${SHLIB_EXT};${PREFIX}/lib/libdf${SHLIB_EXT}" \
       -DENABLE_CDF5=ON \
       ${CMAKE_PLATFORM_FLAGS[@]} \
       -DENABLE_NCZARR=on -DENABLE_NCZARR_S3=off -DENABLE_NCZARR_S3_TESTS=off \
