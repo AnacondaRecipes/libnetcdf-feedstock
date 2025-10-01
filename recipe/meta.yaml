@@ -64,6 +64,24 @@ requirements:
     - openssl  # [not win]
     - zlib
 
+test:
+  commands:
+    - test -f ${PREFIX}/lib/libnetcdf.a             # [unix]
+    - test -f ${PREFIX}/lib/libnetcdf${SHLIB_EXT}   # [unix]
+    - if not exist %LIBRARY_LIB%\netcdf.lib exit 1  # [win]
+    - nc-config --all                         # [unix]
+    - nc-config --has-dap      | grep -q yes  # [unix]
+    - nc-config --has-dap2     | grep -q yes  # [unix]
+    - nc-config --has-dap4     | grep -q yes  # [unix]
+    - nc-config --has-nc2      | grep -q yes  # [unix]
+    - nc-config --has-nc4      | grep -q yes  # [unix]
+    - nc-config --has-hdf5     | grep -q yes  # [unix]
+    - nc-config --has-hdf4     | grep -q yes  # [unix]
+    - nc-config --has-logging  | grep -q yes  # [unix]
+    - nc-config --has-cdf5     | grep -q yes  # [unix]
+    - ncdump      # [unix]
+    - ncdump.exe  # [win]
+
 about:
   home: https://github.com/Unidata/netcdf-c
   license: BSD-3-Clause
