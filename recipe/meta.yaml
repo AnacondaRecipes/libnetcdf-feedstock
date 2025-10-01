@@ -45,7 +45,7 @@ requirements:
   host:
     - blosc {{ blosc }}
     - bzip2 {{ bzip2 }}
-    - hdf4 {{ hdf4}}
+    - hdf4 {{ hdf4 }}
     - hdf5 {{ hdf5 }}
     - libaec {{ libaec }}
     - libcurl {{ libcurl }}
