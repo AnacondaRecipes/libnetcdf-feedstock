@@ -5,6 +5,11 @@ set BUILD_TYPE=Release
 :: set BUILD_TYPE=RelWithDebInfo
 :: set BUILD_TYPE=Debug
 
+REM Windows has issues with backslashes during CMake build
+set "PREFIX=%PREFIX:\=/%"
+set "LIBRARY_PREFIX=%LIBRARY_PREFIX:\=/%"
+set "LIBRARY_INC=%LIBRARY_INC:\=/%"
+
 rem manually specify hdf5 paths to work-around https://github.com/Unidata/netcdf-c/issues/1444
 cmake -G "Ninja" ^
       -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
