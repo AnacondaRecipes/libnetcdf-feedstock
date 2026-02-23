@@ -15,7 +15,7 @@ source:
     - patches/fix-s3-support.patch
 
 build:
-  number: 1
+  number: 2
   run_exports:
     # C has good backcompat, C++ has poor.  Since we only build C, go with good
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
@@ -58,13 +58,13 @@ requirements:
     - zlib {{ zlib }}
     - zstd {{ zstd }}
   run:
-    - bzip2
+    - bzip2 >=1.0.8,<2
     - libcurl
     - hdf4
     - hdf5
-    - libzip
+    - libzip >=1.8.0,<2
     - openssl  # [not win]
-    - zlib
+    - zlib >=1.3.1,<2
 
 test:
   commands:
