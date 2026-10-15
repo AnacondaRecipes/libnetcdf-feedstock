@@ -10,7 +10,7 @@ source:
   sha256: 33c27231c478c3b35da7c7758fbdd02da1fe407abcb16ddfe195f69d164f930d
 
 build:
-  number: 0
+  number: 1
   run_exports:
     # C has good backcompat, C++ has poor.  Since we only build C, go with good
     #   https://abi-laboratory.pro/tracker/timeline/netcdf/
@@ -38,6 +38,7 @@ requirements:
     - msys2-m4  # [win]
     - wget  # [not win]
     - diffutils  # [linux]
+    - ninja-base  # [win]
   host:
     - blosc {{ blosc }}
     - bzip2 {{ bzip2 }}
@@ -46,7 +47,7 @@ requirements:
     - libaec {{ libaec }}
     - libcurl {{ libcurl }}
     - libxml2 {{ libxml2 }}
-    - libzip 1.8.0
+    - libzip 1
     # Openssl provides libcrypto which is needed via libcurl, but doesn't get
     # to the run reqs through run_exports because it is twice removed
     - openssl {{ openssl }}  # [not win]
